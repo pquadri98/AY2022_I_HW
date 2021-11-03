@@ -1,9 +1,9 @@
 # Electronic Technologies and Biosensors Laboratory
-## Academic Year 2020/2021 - II Semester
+## Academic Year 2021/2022 - I Semester
 
-## Assignment 03
-This repository contains the PSoC Creator workspace to be used as a starting point for the successfull submission of the Assignment 03
-of the course "Electronic Technologies and Biosensors Laboratory" of the II Semester of the academic year 2020/2021.
+## Assignment
+This repository contains the PSoC Creator workspace to be used as a starting point for the successfull submission of the Assignment
+of the course "Electronic Technologies and Biosensors Laboratory".
 
 ### Objective
 In this Project, you have to setup an I2C Slave using the PSoC and sample 2 analog sensors using a Delta-Sigma ADC. For data visualization, you will use the Bridge Control Panel to
@@ -94,17 +94,17 @@ You have to set up the ISR accordingly to guarantee the required transmission da
 - Following the forking of the repository, the other team member(s) are added as collaborators via GitHub (as you did with the previous assignments)
 - Each team member clones the forked repository by entering the following command in the terminal:
 
-    `git clone https://github.com/[your_username]/AY2021_II_HW_03.git`
+    `git clone https://github.com/[your_username]/AY2022_I_HW.git`
 - Open up the workspace in PSoC Creator
 - Activate the project with your group number
 - Work on your project
 - In your Group folder, save the Bridge Control Panel configuration files (GROUP_XX.ini and GROUP_XX.iic) inside BRIDGE_CONTROL_PANEL_CONFIG_FILES folder  
 - The last commit must be named '*GROUP_XX* Final Delivery', where XX is the group number
-- One member of the team proposes a pull request before the deadline for the assignment, which is on **April 27 at 6PM**
+- One member of the team proposes a pull request before the deadline for the assignment, which is on **November 12 at 6PM**
 
 
 ### Evaluation
-The evaluation of the assignment will take into consideration the following aspects of the project:
+We will evaluate the assignments taking into consideration the following aspects:
 - successful build process without any warning/error generated
 - successful programming without any error generated
 - correct functioning of the device as per the requirements
