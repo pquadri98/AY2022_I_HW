@@ -19,7 +19,7 @@ Pin          | Description |
 12.0         | I2C SCL
 12.1         | I2C SDA
 
-(*) See the connection scheme below to hook up the photoresistor (<a href="https://components101.com/asset/sites/default/files/component_datasheet/LDR%20Datasheet.pdf">Datasheet</a>)
+(*) See the connection scheme below to hook up the photoresistor (<a href="https://components101.com/sites/default/files/component_datasheet/LDR%20Datasheet.pdf">Datasheet</a>)
 <a href="https://ibb.co/Vm0pbTk"><img src="https://i.ibb.co/tXwPnD1/Cattura.jpg" alt="Photoresistor schematic" width="70%" border="0"></a>
 
 (\**) Please refer to the following image and to the datasheet of the component (<a href="https://www.analog.com/media/en/technical-documentation/data-sheets/TMP35_36_37.pdf">TMP36GZ</a>) to hook up the temperature sensor
