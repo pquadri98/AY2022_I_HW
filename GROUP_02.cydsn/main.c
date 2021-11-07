@@ -13,7 +13,7 @@
 #include "InterruptRoutines.h"
 
 #define SLAVE_BUFFER_SIZE 7
-#define BUFFER_RW_AREA_SIZE 0x03
+#define BUFFER_RW_AREA_SIZE 0x02
 #define WHO_AM_I_REGISTER 0xBC
 
 uint8_t slaveBuffer[SLAVE_BUFFER_SIZE]; 

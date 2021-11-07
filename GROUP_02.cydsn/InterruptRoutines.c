@@ -14,8 +14,6 @@
 
 extern uint8_t slaveBuffer[];
 
-
-
 CY_ISR(Custom_ISR_ADC)
 {
     Timer_ADC_ReadStatusRegister();
@@ -23,17 +21,19 @@ CY_ISR(Custom_ISR_ADC)
     {
         case 0x01: // Temperature readout
             
-            AMux_Select(CH_TEMP);
+            AMux_FastSelect(CH_TEMP);
+            if(counter_samples < NUMERO_CAMPIONI) // Campiono fino a quando ho 5 campioni
+            {
+                temperatura_1 = ADC_DelSig_Read32();
+                if(temperatura_1 < 0) temperatura_1 = 0;
+                if(temperatura_1 > 65535) temperatura_1 = 65535;
+                temperatura_mv = ADC_DelSig_CountsTo_mVolts(temperatura_1);
             
-            temperatura_1 = ADC_DelSig_Read32();
-            temperatura_1 = ADC_DelSig_CountsTo_mVolts(temperatura_1);
-            temperatura_2 = ADC_DelSig_Read32();
-            temperatura_2 = ADC_DelSig_CountsTo_mVolts(temperatura_2);
-            
-            avg_temperatura = (temperatura_1 + temperatura_2) / 2;
- 
-            slaveBuffer[3] = (avg_temperatura >> 8);
-            slaveBuffer[4] = (avg_temperatura & 0xFF);           
+                avg_temperatura = (avg_temperatura + temperatura_mv);
+                
+                counter_samples ++;
+            }
+           
             break;
         case 0x02: // Light readout
             break;
@@ -42,12 +42,19 @@ CY_ISR(Custom_ISR_ADC)
         default:   // Rest condition
             break;
     }
-
+    
+    if(counter_samples == 5) // Dopo 5 step posso aggioranre i valori nel buffer
+    {
+        // avg_temperatura = avg_temperatura / 5; // Il risultato di questa operazione è sempre 0
+        
+        slaveBuffer[3] = avg_temperatura >> 8;
+        slaveBuffer[4] = avg_temperatura & 0xFF;
+    }
 }
 
-void EZI2C_ISR_ExitCallback(void)
+
+void EZI2C_ISR_ExitCallback()
 {
-    
     if(FlagStatus != (slaveBuffer[0] & 0x03))
     {
         FlagStatus = (slaveBuffer[0] & 0x03); // Aggiorno lo stato in cui sono
@@ -56,6 +63,8 @@ void EZI2C_ISR_ExitCallback(void)
         // Ripristino condizioni di lavoro 
     }
     
+    counter_samples = 0;
+    avg_temperatura = 0;
 }
 
 

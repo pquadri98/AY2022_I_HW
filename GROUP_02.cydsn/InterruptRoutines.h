@@ -16,13 +16,15 @@
     
     #define CH_TEMP 0
     #define CH_LUCE 1
+    #define NUMERO_CAMPIONI 5
     
     uint8 FlagStatus;
+    uint8 counter_samples;
     
-    uint32 temperatura_1;
-    uint32 temperatura_2;
+    int32 temperatura_mv;
     
-    uint32 avg_temperatura;
+    int32 temperatura_1;
+    int32 avg_temperatura;
     
     CY_ISR_PROTO(Custom_ISR_ADC);
 
