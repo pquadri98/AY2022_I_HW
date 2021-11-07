@@ -14,7 +14,12 @@
     
     #include "cytypes.h"
     
+    #define CH_TEMP 0
+    #define CH_LUCE 1
+    
     uint8 FlagStatus;
+    
+    uint32 temperatura;
     
     CY_ISR_PROTO(Custom_ISR_ADC);
 

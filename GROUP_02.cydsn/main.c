@@ -22,6 +22,14 @@ int main(void)
 {
     CyGlobalIntEnable; /* Enable global interrupts. */
     
+    Timer_ADC_Start();
+    isr_ADC_StartEx(Custom_ISR_ADC);
+    
+    ADC_DelSig_Start();
+    AMux_Start();
+    
+    
+    
     EZI2C_Start();
     
     // Setup slaveBuffer

@@ -19,13 +19,22 @@ CY_ISR(Custom_ISR_ADC)
 {
     switch(FlagStatus)
     {
-        case 0x01:
+        case 0x01: // Temperature readout
+            ADC_DelSig_StopConvert();
+            AMux_Select(CH_TEMP);
+
+            temperatura = ADC_DelSig_Read32();
+            temperatura = ADC_DelSig_CountsTo_mVolts(temperatura);
+            
+            slaveBuffer[3] = (temperatura >> 8);
+            slaveBuffer[4] = (temperatura & 0xFF);
+            
             break;
-        case 0x02:
+        case 0x02: // Light readout
             break;
-        case 0x03:
+        case 0x03: // Temperature and light readout
             break;
-        default:
+        default:   // Rest condition
             break;
     }
 
