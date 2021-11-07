@@ -29,6 +29,9 @@ int main(void)
     // Predispongo già il numero di campioni per la media pari a 5
     slaveBuffer[0] = 0b00010100; 
     
+    // Status bits
+    FlagStatus = (slaveBuffer[0] & 0x03);
+    
      
     // Timer a 10khz
     // Questo valore può essere modificato cambiando il valore di questo registro

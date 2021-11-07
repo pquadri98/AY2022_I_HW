@@ -14,6 +14,7 @@
     
     #include "cytypes.h"
     
+    uint8 FlagStatus;
     
     CY_ISR_PROTO(Custom_ISR_ADC);
 
