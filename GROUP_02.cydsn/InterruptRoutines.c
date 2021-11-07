@@ -18,6 +18,7 @@ extern uint8_t slaveBuffer[];
 
 CY_ISR(Custom_ISR_ADC)
 {
+    Timer_ADC_ReadStatusRegister();
     switch(FlagStatus)
     {
         case 0x01: // Temperature readout
