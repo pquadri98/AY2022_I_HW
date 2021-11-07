@@ -19,7 +19,10 @@
     
     uint8 FlagStatus;
     
-    uint32 temperatura;
+    uint32 temperatura_1;
+    uint32 temperatura_2;
+    
+    uint32 avg_temperatura;
     
     CY_ISR_PROTO(Custom_ISR_ADC);
 
