@@ -90,6 +90,8 @@ CY_ISR(Custom_ISR_ADC)
         slaveBuffer[4] = avg_temperatura & 0xFF;
         slaveBuffer[5] = avg_luce >> 8;
         slaveBuffer[6] = avg_luce & 0xFF;
+        
+        counter_samples ++;
     }
 }
 
