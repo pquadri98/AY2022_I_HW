@@ -45,7 +45,7 @@ CY_ISR(Custom_ISR_ADC)
     
     if(counter_samples == 5) // Dopo 5 step posso aggioranre i valori nel buffer
     {
-        avg_temperatura = sum_t / 5; // Il risultato di questa operazione è sempre 0
+        avg_temperatura = sum_t / 5;
         
         slaveBuffer[3] = avg_temperatura >> 8;
         slaveBuffer[4] = avg_temperatura & 0xFF;
@@ -60,6 +60,7 @@ void EZI2C_ISR_ExitCallback()
         FlagStatus = (slaveBuffer[0] & 0x03); // Aggiorno lo stato in cui sono
         if (FlagStatus == 0x03) Pin_LED_Write(1);
         else Pin_LED_Write(0);
+        
         // Ripristino condizioni di lavoro 
         slaveBuffer[3] = 0;
         slaveBuffer[4] = 0;
