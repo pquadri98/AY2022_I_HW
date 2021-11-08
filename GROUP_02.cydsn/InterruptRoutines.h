@@ -14,7 +14,22 @@
     
     #include "cytypes.h"
     
+    #define CH_TEMP 0
+    #define CH_LUCE 1
+    #define NUMERO_CAMPIONI 5
+    
     uint8 FlagStatus;
+    uint8 counter_samples;
+    
+    int32 temperatura_mv;
+    int32 temperatura_1;
+    int32 avg_temperatura;
+    int32 sum_t;
+    
+    int32 luce_mv;
+    int32 luce;
+    int32 avg_luce;
+    int32 sum_l;
     
     CY_ISR_PROTO(Custom_ISR_ADC);
 
