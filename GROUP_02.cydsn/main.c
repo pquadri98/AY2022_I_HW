@@ -54,6 +54,11 @@ int main(void)
     // Set up EZI2C buffer
     EZI2C_SetBuffer1(SLAVE_BUFFER_SIZE, BUFFER_RW_AREA_SIZE ,slaveBuffer);
     
+    // Il sistema parte nella condizione 0b00
+    // Aspettiamo 5ms affinchè tutto si sistemi
+    CyDelay(5);
+    
+    
     /* Place your initialization/startup code here (e.g. MyInst_Start()) */
 
     for(;;)
