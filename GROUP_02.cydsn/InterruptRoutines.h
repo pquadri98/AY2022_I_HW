@@ -25,6 +25,7 @@
     
     int32 temperatura_1;
     int32 avg_temperatura;
+    int32 sum_t;
     
     CY_ISR_PROTO(Custom_ISR_ADC);
 
