@@ -91,6 +91,7 @@ CY_ISR(Custom_ISR_ADC)
         slaveBuffer[5] = avg_luce >> 8;
         slaveBuffer[6] = avg_luce & 0xFF;
         
+        // In questo modo counter_sample = 6, non rientro in nessuno dei casi precedenti
         counter_samples ++;
     }
 }
