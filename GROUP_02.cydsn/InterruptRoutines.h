@@ -22,10 +22,14 @@
     uint8 counter_samples;
     
     int32 temperatura_mv;
-    
     int32 temperatura_1;
     int32 avg_temperatura;
     int32 sum_t;
+    
+    int32 luce_mv;
+    int32 luce;
+    int32 avg_luce;
+    int32 sum_l;
     
     CY_ISR_PROTO(Custom_ISR_ADC);
 

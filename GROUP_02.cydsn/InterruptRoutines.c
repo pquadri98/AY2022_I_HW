@@ -36,6 +36,18 @@ CY_ISR(Custom_ISR_ADC)
            
             break;
         case 0x02: // Light readout
+            AMux_FastSelect(CH_LUCE);
+            if(counter_samples < NUMERO_CAMPIONI) // Campiono fino a quando ho 5 campioni
+            {
+                luce = ADC_DelSig_Read32();
+                if(luce < 0) luce = 0;
+                if(luce > 65535) luce = 65535;
+                luce_mv = ADC_DelSig_CountsTo_mVolts(luce);
+            
+                sum_l = (sum_l + luce_mv);
+                
+                counter_samples ++;
+            }
             break;
         case 0x03: // Temperature and light readout
             break;
@@ -46,10 +58,13 @@ CY_ISR(Custom_ISR_ADC)
     if(counter_samples == 5) // Dopo 5 step posso aggioranre i valori nel buffer
     {
         avg_temperatura = sum_t / 5;
+        avg_luce = sum_l / 5;
         
         
         slaveBuffer[3] = avg_temperatura >> 8;
         slaveBuffer[4] = avg_temperatura & 0xFF;
+        slaveBuffer[5] = avg_luce >> 8;
+        slaveBuffer[6] = avg_luce & 0xFF;
     }
 }
 
@@ -70,10 +85,12 @@ void EZI2C_ISR_ExitCallback()
         
         counter_samples = 0;
         sum_t = 0;
+        sum_l = 0;
     }
     
     counter_samples = 0;
     sum_t = 0;
+    sum_l = 0;
 }
 
 
