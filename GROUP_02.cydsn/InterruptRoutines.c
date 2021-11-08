@@ -47,6 +47,7 @@ CY_ISR(Custom_ISR_ADC)
     {
         avg_temperatura = sum_t / 5;
         
+        
         slaveBuffer[3] = avg_temperatura >> 8;
         slaveBuffer[4] = avg_temperatura & 0xFF;
     }

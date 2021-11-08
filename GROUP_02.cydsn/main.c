@@ -46,10 +46,10 @@ int main(void)
     // Timer 1 Period value predisposto a 10, isr ogni 1 ms
     slaveBuffer[1] = 0x0A; 
     slaveBuffer[2] = WHO_AM_I_REGISTER;
-    slaveBuffer[3] = 0;
-    slaveBuffer[4] = 0;
-    slaveBuffer[5] = 0;
-    slaveBuffer[6] = 0;
+    slaveBuffer[3] = 0; // Ch0 Bit 15-8
+    slaveBuffer[4] = 0; // Ch0 Bit 07-0
+    slaveBuffer[5] = 0; // Ch1 Bit 15-8
+    slaveBuffer[6] = 0; // Ch1 Bit 07-0
     
     // Set up EZI2C buffer
     EZI2C_SetBuffer1(SLAVE_BUFFER_SIZE, BUFFER_RW_AREA_SIZE ,slaveBuffer);
