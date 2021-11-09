@@ -1,0 +1,17 @@
+; Utilizzo entrambi canali, 5 campioni: control_register_0 =  0b00010111 = 0x17
+w 08 00 17 p
+w 08 03 p
+r 08 @1temp @0temp @1light @0light p
+
+; Solo luce, 5 campioni: control_register_0 =  0b00010110 = 0x16
+w 08 00 16 p
+w 08 05 p
+r 08 @1light @0light p
+
+; Solo temperatura, 5 campioni: control_register_0 =  0b00010101 = 0x15
+w 08 00 15 p
+w 08 03 p
+r 08 @1temp @0temp p
+
+; Stop operations
+w 08 00 00 p
