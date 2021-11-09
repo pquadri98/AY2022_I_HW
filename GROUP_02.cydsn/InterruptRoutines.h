@@ -20,6 +20,7 @@
     
     uint8 FlagStatus;
     uint8 counter_samples;
+    uint8 MeanReady;
     
     int32 temperatura_mv;
     int32 temperatura_1;
@@ -32,6 +33,7 @@
     int32 sum_l;
     
     CY_ISR_PROTO(Custom_ISR_ADC);
+    CY_ISR_PROTO(Custom_ISR_50Hz);
 
 #endif
 /* [] END OF FILE */

@@ -12,9 +12,9 @@
 #include "project.h"
 #include "InterruptRoutines.h"
 
-#define SLAVE_BUFFER_SIZE 7
-#define BUFFER_RW_AREA_SIZE 0x02
-#define WHO_AM_I_REGISTER 0xBC
+#define SLAVE_BUFFER_SIZE 7 // Numero di registri nel buffer
+#define BUFFER_RW_AREA_SIZE 0x02 // Numero di registri R/W
+#define WHO_AM_I_REGISTER 0xBC 
 
 uint8_t slaveBuffer[SLAVE_BUFFER_SIZE]; 
 
@@ -22,8 +22,12 @@ int main(void)
 {
     CyGlobalIntEnable; /* Enable global interrupts. */
     
+    // Inizializzazione delle periferiche
     Timer_ADC_Start();
     isr_ADC_StartEx(Custom_ISR_ADC);
+    
+    Timer_50Hz_Start();
+    isr_50hz_StartEx(Custom_ISR_50Hz);
     
     ADC_DelSig_Start();
     AMux_Start();
@@ -35,16 +39,18 @@ int main(void)
     // Setup slaveBuffer
     // Entrambi status bit pari a zero
     // Predispongo già il numero di campioni per la media pari a 5
+    // Il sistema parte nella condizione 0b00
     slaveBuffer[0] = 0b00010100; 
     
-    // Status bits
+    // Estrazione bit per il controllo delle operazioni
     FlagStatus = (slaveBuffer[0] & 0x03);
     
      
     // Timer a 10khz
-    // Questo valore può essere modificato cambiando il valore di questo registro
     // Timer 1 Period value predisposto a 10, isr ogni 1 ms
-    slaveBuffer[1] = 0x0A; 
+    slaveBuffer[1] = 0x0A;
+    
+    // Registri only Read
     slaveBuffer[2] = WHO_AM_I_REGISTER;
     slaveBuffer[3] = 0; // Ch0 Bit 15-8
     slaveBuffer[4] = 0; // Ch0 Bit 07-0
@@ -54,12 +60,9 @@ int main(void)
     // Set up EZI2C buffer
     EZI2C_SetBuffer1(SLAVE_BUFFER_SIZE, BUFFER_RW_AREA_SIZE ,slaveBuffer);
     
-    // Il sistema parte nella condizione 0b00
-    // Aspettiamo 5ms affinchè tutto si sistemi
+    // Aspettiamo 5ms affinchè tutto si inizializzi correttamente
     CyDelay(5);
     
-    
-    /* Place your initialization/startup code here (e.g. MyInst_Start()) */
 
     for(;;)
     {
