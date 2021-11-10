@@ -26,13 +26,9 @@ int main(void)
     Timer_ADC_Start();
     isr_ADC_StartEx(Custom_ISR_ADC);
     
-    Timer_50Hz_Start();
-    isr_50hz_StartEx(Custom_ISR_50Hz);
     
     ADC_DelSig_Start();
     AMux_Start();
-    
-    
     
     EZI2C_Start();
     
@@ -48,7 +44,7 @@ int main(void)
      
     // Timer a 10khz
     // Timer 1 Period value predisposto a 10, isr ogni 1 ms
-    slaveBuffer[1] = 0x0A;
+    slaveBuffer[1] = PeriodoTimer;
     
     // Registri only Read
     slaveBuffer[2] = WHO_AM_I_REGISTER;

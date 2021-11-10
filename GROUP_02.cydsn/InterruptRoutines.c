@@ -13,6 +13,8 @@
 #include "project.h"
 
 extern uint8_t slaveBuffer[];
+uint8 numero_campioni = NUMERO_CAMPIONI;
+uint8 PeriodoTimer = 0x0A;
 
 CY_ISR(Custom_ISR_ADC)
 {
@@ -22,7 +24,7 @@ CY_ISR(Custom_ISR_ADC)
         case 0x01: // Temperature readout
             
             AMux_FastSelect(CH_TEMP);
-            if(counter_samples < NUMERO_CAMPIONI) // Campiono fino a quando ho 5 campioni
+            if(counter_samples < numero_campioni) // Campiono fino a quando ho 5 campioni
             {
                 temperatura_1 = ADC_DelSig_Read32();
                 if(temperatura_1 < 0) temperatura_1 = 0;
@@ -37,7 +39,7 @@ CY_ISR(Custom_ISR_ADC)
             break;
         case 0x02: // Light readout
             AMux_FastSelect(CH_LUCE);
-            if(counter_samples < NUMERO_CAMPIONI) // Campiono fino a quando ho 5 campioni
+            if(counter_samples < numero_campioni) // Campiono fino a quando ho 5 campioni
             {
                 luce = ADC_DelSig_Read32();
                 if(luce < 0) luce = 0;
@@ -50,7 +52,7 @@ CY_ISR(Custom_ISR_ADC)
             }
             break;
         case 0x03: // Temperature and light readout
-            if(counter_samples < NUMERO_CAMPIONI) // Campiono fino a quando ho 5 campioni
+            if(counter_samples < numero_campioni) // Campiono fino a quando ho 5 campioni
             {
                 /*
                 Il datasheet AMUX consiglia di fermare la conversione durante
@@ -82,31 +84,19 @@ CY_ISR(Custom_ISR_ADC)
             break;
     }
     
-    if(counter_samples == NUMERO_CAMPIONI) // Dopo 5 step posso aggioranre i valori nel buffer
+    if(counter_samples == numero_campioni) // Dopo 5 step posso aggioranre i valori nel buffer
     {
-        avg_temperatura = sum_t / NUMERO_CAMPIONI;
-        avg_luce = sum_l / NUMERO_CAMPIONI;
+        avg_temperatura = sum_t / numero_campioni;
+        avg_luce = sum_l / numero_campioni;
         
-        // I dati sono pronti per essere inseriti nel buffer
-        MeanReady = 1;
-        
-        // In questo modo counter_sample = 6, non rientro in nessuno dei casi precedenti
-        counter_samples ++;
-        
-    }
-}
-
-CY_ISR(Custom_ISR_50Hz) // Aggiorniamo il buffer ogni 50Hz
-{
-    if(MeanReady == 1)
-    {
-        // Aggiornamento valori nel buffer
         slaveBuffer[3] = avg_temperatura >> 8;
         slaveBuffer[4] = avg_temperatura & 0xFF;
         slaveBuffer[5] = avg_luce >> 8;
         slaveBuffer[6] = avg_luce & 0xFF;
         
-        MeanReady = 0;
+        // In questo modo counter_sample = 6, non rientro in nessuno dei casi precedenti
+        counter_samples ++;
+        
     }
 }
 
@@ -128,6 +118,20 @@ void EZI2C_ISR_ExitCallback()
         // Fermo la conversione solo se cambio stato di lavoro 0b00, 0b01, 0b10, 0b11
         ADC_DelSig_StopConvert();
         
+    }
+    
+    // Aggiorniamo il numero di campioni se viene modificato
+    if(numero_campioni != ((slaveBuffer[0] & 0b00111100)>>2))
+    {
+        numero_campioni = ((slaveBuffer[0] & 0b00111100)>>2);
+    }
+    
+    // Aggiorniamo il periodo del Timer se viene modificato
+    if(PeriodoTimer != slaveBuffer[1])
+    {
+        PeriodoTimer = slaveBuffer[1];
+        // Per un corretto funzionamento periodTimer < 0x0A
+        Timer_ADC_WritePeriod(PeriodoTimer);
     }
     
     counter_samples = 0;
