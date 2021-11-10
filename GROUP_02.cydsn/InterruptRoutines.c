@@ -13,8 +13,8 @@
 #include "project.h"
 
 extern uint8_t slaveBuffer[];
-uint8 numero_campioni = NUMERO_CAMPIONI;
-uint8 PeriodoTimer = 0x0A;
+uint8 numero_campioni = 0;
+uint8 PeriodoTimer = 0x00;
 
 CY_ISR(Custom_ISR_ADC)
 {
@@ -34,7 +34,7 @@ CY_ISR(Custom_ISR_ADC)
                 sum_t = (sum_t + temperatura_mv);
                 
                 counter_samples ++;
-            }
+            } 
            
             break;
         case 0x02: // Light readout
@@ -84,20 +84,28 @@ CY_ISR(Custom_ISR_ADC)
             break;
     }
     
-    if(counter_samples == numero_campioni) // Dopo 5 step posso aggioranre i valori nel buffer
+    if(counter_samples == numero_campioni) // Dopo numero_campioni step posso aggioranre i valori nel buffer
     {
         avg_temperatura = sum_t / numero_campioni;
         avg_luce = sum_l / numero_campioni;
         
+        counter_samples ++;
+        
+    }
+    
+    // Se ho calcolato i dati aspetto fino a 20ms
+    if((counter_samples > numero_campioni) && (counter_samples < 20)) counter_samples ++;
+    if(counter_samples == 20)
+    {
         slaveBuffer[3] = avg_temperatura >> 8;
         slaveBuffer[4] = avg_temperatura & 0xFF;
         slaveBuffer[5] = avg_luce >> 8;
         slaveBuffer[6] = avg_luce & 0xFF;
         
-        // In questo modo counter_sample = 6, non rientro in nessuno dei casi precedenti
-        counter_samples ++;
-        
+        // Per non rientrare nei casi precedenti
+        counter_samples++;
     }
+    
 }
 
 
@@ -130,7 +138,7 @@ void EZI2C_ISR_ExitCallback()
     if(PeriodoTimer != slaveBuffer[1])
     {
         PeriodoTimer = slaveBuffer[1];
-        // Per un corretto funzionamento periodTimer < 0x0A
+        // Per un corretto funzionamento periodTimer = 0x0A
         Timer_ADC_WritePeriod(PeriodoTimer);
     }
     
