@@ -87,26 +87,14 @@ CY_ISR(Custom_ISR_ADC)
         avg_temperatura = sum_t / NUMERO_CAMPIONI;
         avg_luce = sum_l / NUMERO_CAMPIONI;
         
-        // I dati sono pronti per essere inseriti nel buffer
-        MeanReady = 1;
-        
-        // In questo modo counter_sample = 6, non rientro in nessuno dei casi precedenti
-        counter_samples ++;
-        
-    }
-}
-
-CY_ISR(Custom_ISR_50Hz) // Aggiorniamo il buffer ogni 50Hz
-{
-    if(MeanReady == 1)
-    {
-        // Aggiornamento valori nel buffer
         slaveBuffer[3] = avg_temperatura >> 8;
         slaveBuffer[4] = avg_temperatura & 0xFF;
         slaveBuffer[5] = avg_luce >> 8;
         slaveBuffer[6] = avg_luce & 0xFF;
         
-        MeanReady = 0;
+        // In questo modo counter_sample = 6, non rientro in nessuno dei casi precedenti
+        counter_samples ++;
+        
     }
 }
 

@@ -26,13 +26,9 @@ int main(void)
     Timer_ADC_Start();
     isr_ADC_StartEx(Custom_ISR_ADC);
     
-    Timer_50Hz_Start();
-    isr_50hz_StartEx(Custom_ISR_50Hz);
     
     ADC_DelSig_Start();
     AMux_Start();
-    
-    
     
     EZI2C_Start();
     
