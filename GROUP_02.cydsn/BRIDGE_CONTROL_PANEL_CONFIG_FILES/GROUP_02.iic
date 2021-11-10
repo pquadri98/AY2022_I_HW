@@ -1,5 +1,5 @@
 ; Controllo periodo Timer
-; Per un corretto funzionamento il periodo deve essere < 10 = 0x0A
+; Per un corretto funzionamento il periodo deve essere = 10 = 0x0A
 w 08 01 0A p
 
 ; Assicurarsi che scan period sia impostato a 20ms

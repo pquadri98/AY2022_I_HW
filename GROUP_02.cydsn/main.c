@@ -34,9 +34,10 @@ int main(void)
     
     // Setup slaveBuffer
     // Entrambi status bit pari a zero
-    // Predispongo già il numero di campioni per la media pari a 5
+    // Predispongo già il numero di campioni per la media pari a 0
+    // Attendiamo inserimento valori da BCP
     // Il sistema parte nella condizione 0b00
-    slaveBuffer[0] = 0b00010100; 
+    slaveBuffer[0] = 0b000000000; 
     
     // Estrazione bit per il controllo delle operazioni
     FlagStatus = (slaveBuffer[0] & 0x03);
