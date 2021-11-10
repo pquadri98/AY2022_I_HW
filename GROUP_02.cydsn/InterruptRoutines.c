@@ -13,6 +13,7 @@
 #include "project.h"
 
 extern uint8_t slaveBuffer[];
+uint8 numero_campioni = NUMERO_CAMPIONI;
 
 CY_ISR(Custom_ISR_ADC)
 {
@@ -22,7 +23,7 @@ CY_ISR(Custom_ISR_ADC)
         case 0x01: // Temperature readout
             
             AMux_FastSelect(CH_TEMP);
-            if(counter_samples < NUMERO_CAMPIONI) // Campiono fino a quando ho 5 campioni
+            if(counter_samples < numero_campioni) // Campiono fino a quando ho 5 campioni
             {
                 temperatura_1 = ADC_DelSig_Read32();
                 if(temperatura_1 < 0) temperatura_1 = 0;
@@ -37,7 +38,7 @@ CY_ISR(Custom_ISR_ADC)
             break;
         case 0x02: // Light readout
             AMux_FastSelect(CH_LUCE);
-            if(counter_samples < NUMERO_CAMPIONI) // Campiono fino a quando ho 5 campioni
+            if(counter_samples < numero_campioni) // Campiono fino a quando ho 5 campioni
             {
                 luce = ADC_DelSig_Read32();
                 if(luce < 0) luce = 0;
@@ -50,7 +51,7 @@ CY_ISR(Custom_ISR_ADC)
             }
             break;
         case 0x03: // Temperature and light readout
-            if(counter_samples < NUMERO_CAMPIONI) // Campiono fino a quando ho 5 campioni
+            if(counter_samples < numero_campioni) // Campiono fino a quando ho 5 campioni
             {
                 /*
                 Il datasheet AMUX consiglia di fermare la conversione durante
@@ -82,10 +83,10 @@ CY_ISR(Custom_ISR_ADC)
             break;
     }
     
-    if(counter_samples == NUMERO_CAMPIONI) // Dopo 5 step posso aggioranre i valori nel buffer
+    if(counter_samples == numero_campioni) // Dopo 5 step posso aggioranre i valori nel buffer
     {
-        avg_temperatura = sum_t / NUMERO_CAMPIONI;
-        avg_luce = sum_l / NUMERO_CAMPIONI;
+        avg_temperatura = sum_t / numero_campioni;
+        avg_luce = sum_l / numero_campioni;
         
         slaveBuffer[3] = avg_temperatura >> 8;
         slaveBuffer[4] = avg_temperatura & 0xFF;
@@ -116,6 +117,11 @@ void EZI2C_ISR_ExitCallback()
         // Fermo la conversione solo se cambio stato di lavoro 0b00, 0b01, 0b10, 0b11
         ADC_DelSig_StopConvert();
         
+    }
+    
+    if(numero_campioni != ((slaveBuffer[0] & 0b00111100)>>2))
+    {
+        numero_campioni = ((slaveBuffer[0] & 0b00111100)>>2);
     }
     
     counter_samples = 0;
