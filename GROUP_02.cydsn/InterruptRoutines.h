@@ -20,6 +20,7 @@
     
     uint8 FlagStatus;
     uint8 counter_samples;
+    uint8 PeriodoTimer;
     
     int32 temperatura_mv;
     int32 temperatura_1;

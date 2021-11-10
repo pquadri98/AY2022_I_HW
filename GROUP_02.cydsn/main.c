@@ -44,7 +44,7 @@ int main(void)
      
     // Timer a 10khz
     // Timer 1 Period value predisposto a 10, isr ogni 1 ms
-    slaveBuffer[1] = 0x0A;
+    slaveBuffer[1] = PeriodoTimer;
     
     // Registri only Read
     slaveBuffer[2] = WHO_AM_I_REGISTER;

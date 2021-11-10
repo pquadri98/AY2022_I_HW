@@ -14,6 +14,7 @@
 
 extern uint8_t slaveBuffer[];
 uint8 numero_campioni = NUMERO_CAMPIONI;
+uint8 PeriodoTimer = 0x0A;
 
 CY_ISR(Custom_ISR_ADC)
 {
@@ -119,9 +120,18 @@ void EZI2C_ISR_ExitCallback()
         
     }
     
+    // Aggiorniamo il numero di campioni se viene modificato
     if(numero_campioni != ((slaveBuffer[0] & 0b00111100)>>2))
     {
         numero_campioni = ((slaveBuffer[0] & 0b00111100)>>2);
+    }
+    
+    // Aggiorniamo il periodo del Timer se viene modificato
+    if(PeriodoTimer != slaveBuffer[1])
+    {
+        PeriodoTimer = slaveBuffer[1];
+        // Per un corretto funzionamento periodTimer < 0x0A
+        Timer_ADC_WritePeriod(PeriodoTimer);
     }
     
     counter_samples = 0;
