@@ -1,10 +1,10 @@
-; Controllo periodo Timer
-; Per un corretto funzionamento il periodo deve essere = 10 = 0x0A
+; Controllo periodo Timer ADC
+; Per un corretto funzionamento, anche a 16 campioni, il periodo del timer deve essere <= 10 = 0x0A
+; Default value 0x00
 w 08 01 0A p
 
 ; Assicurarsi che scan period sia impostato a 20ms
 
-; Possibile modificare il numero di campioni su cui fare la media
 ; Utilizzo entrambi canali, 5 campioni: control_register_0 =  0b00010111 = 0x17
 w 08 00 17 p
 w 08 03 p
@@ -18,7 +18,6 @@ r 08 @1light @0light p
 ; Solo temperatura, 5 campioni: control_register_0 =  0b00010101 = 0x15
 w 08 00 15 p
 w 08 03 p
-
 r 08 @1temp @0temp p
 
 ; Stop operations

@@ -9,6 +9,10 @@
  *
  * ========================================
 */
+
+// Versione Finale
+
+
 #include "project.h"
 #include "InterruptRoutines.h"
 
@@ -25,6 +29,8 @@ int main(void)
     // Inizializzazione delle periferiche
     Timer_ADC_Start();
     isr_ADC_StartEx(Custom_ISR_ADC);
+    Timer_50Hz_Start();
+    isr_50Hz_StartEx(Custom_ISR_50Hz);
     
     
     ADC_DelSig_Start();
@@ -44,7 +50,7 @@ int main(void)
     
      
     // Timer a 10khz
-    // Timer 1 Period value predisposto a 10, isr ogni 1 ms
+    // Timer ADC Period value = 0x00
     slaveBuffer[1] = PeriodoTimer;
     
     // Registri only Read
