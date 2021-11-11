@@ -89,25 +89,29 @@ CY_ISR(Custom_ISR_ADC)
         avg_temperatura = sum_t / numero_campioni;
         avg_luce = sum_l / numero_campioni;
         
+        MeanReady = 1;
+        
+        // Non rientro nei casi precedenti 
         counter_samples ++;
         
-    }
+    }  
+}
+
+CY_ISR(Custom_ISR_50Hz)
+{
+    Timer_50Hz_ReadStatusRegister();
     
-    // Se ho calcolato i dati aspetto fino a 20ms
-    if((counter_samples > numero_campioni) && (counter_samples < 20)) counter_samples ++;
-    if(counter_samples == 20)
+    if(MeanReady == 1)
     {
+        // Aggiorno lo slaveBuffer con i valori della media
         slaveBuffer[3] = avg_temperatura >> 8;
         slaveBuffer[4] = avg_temperatura & 0xFF;
         slaveBuffer[5] = avg_luce >> 8;
         slaveBuffer[6] = avg_luce & 0xFF;
         
-        // Per non rientrare nei casi precedenti
-        counter_samples++;
+        MeanReady = 0;
     }
-    
 }
-
 
 void EZI2C_ISR_ExitCallback()
 {
