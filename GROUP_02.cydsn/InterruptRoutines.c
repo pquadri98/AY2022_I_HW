@@ -14,7 +14,7 @@
 
 extern uint8_t slaveBuffer[];
 uint8 numero_campioni = 0;
-uint8 PeriodoTimer = 0x00;
+uint8 PeriodoTimer = 0x0A;
 
 CY_ISR(Custom_ISR_ADC)
 {
@@ -24,7 +24,7 @@ CY_ISR(Custom_ISR_ADC)
         case 0x01: // Temperature readout
             
             AMux_FastSelect(CH_TEMP);
-            if(counter_samples < numero_campioni) // Campiono fino a quando ho 5 campioni
+            if(counter_samples < numero_campioni) // Campiono fino a quando ho numero_campioni
             {
                 temperatura_1 = ADC_DelSig_Read32();
                 if(temperatura_1 < 0) temperatura_1 = 0;
@@ -39,7 +39,7 @@ CY_ISR(Custom_ISR_ADC)
             break;
         case 0x02: // Light readout
             AMux_FastSelect(CH_LUCE);
-            if(counter_samples < numero_campioni) // Campiono fino a quando ho 5 campioni
+            if(counter_samples < numero_campioni) // Campiono fino a quando ho numero_campioni
             {
                 luce = ADC_DelSig_Read32();
                 if(luce < 0) luce = 0;
@@ -52,7 +52,7 @@ CY_ISR(Custom_ISR_ADC)
             }
             break;
         case 0x03: // Temperature and light readout
-            if(counter_samples < numero_campioni) // Campiono fino a quando ho 5 campioni
+            if(counter_samples < numero_campioni) // Campiono fino a quando ho numero_campioni
             {
                 /*
                 Il datasheet AMUX consiglia di fermare la conversione durante

@@ -40,9 +40,8 @@ int main(void)
     
     // Setup slaveBuffer
     // Entrambi status bit pari a zero
-    // Predispongo già il numero di campioni per la media pari a 0
+    // Campioni per media = 0
     // Attendiamo inserimento valori da BCP
-    // Il sistema parte nella condizione 0b00
     slaveBuffer[0] = 0b000000000; 
     
     // Estrazione bit per il controllo delle operazioni
@@ -50,7 +49,7 @@ int main(void)
     
      
     // Timer a 10khz
-    // Timer ADC Period value = 0x00
+    // Timer ADC Period value = 0x0A
     slaveBuffer[1] = PeriodoTimer;
     
     // Registri only Read
